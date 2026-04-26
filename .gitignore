@@ -1,0 +1,77 @@
+# --- Python / venv ---
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Node.js ---
+node_modules/
+
+# --- Packaging / build artifacts ---
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# --- Compressed Archives ---
+*.zip
+*.rar
+*.tar.gz
+*.7z
+
+# --- Tests / coverage ---
+.pytest_cache/
+.coverage
+.coverage.*
+
+# --- Type checkers / linters ---
+.mypy_cache/
+.pytype/
+.pyright/
+.ruff_cache/
+.pyre/
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Env / secrets ---
+.env
+.env.*
+*.pem
+*.key
+token.json
+credentials.json
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- OS junk (Windows/macOS) ---
+Thumbs.db
+desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Linux ---
+*~
+.cache/
+*.swp
+
+# --- Temporary / Agent artifacts ---
+gemini.md
+agent.md
+.agent/
+.tmp/
+*.orig
+*.bak
+*.old
+
+# --- Misc ---
+*.sln.cache
