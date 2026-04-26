@@ -92,7 +92,8 @@ async function registerDeclarativeContentRules() {
 // ---------------------------------------------------------------------------
 
 /**
- * Creates the three checkbox context menu items under the extension icon.
+ * Creates the three checkbox context menu items under the extension icon,
+ * plus a disabled item displaying the current keyboard shortcut.
  * Reads current preference state to set the initial checked values.
  *
  * @param {Object} prefs - Current preference values keyed by destination key.
@@ -110,6 +111,25 @@ async function createContextMenus(prefs) {
       contexts: ["action"],
     });
   }
+
+  // Retrieve the current shortcut for the action
+  const commands = await chrome.commands.getAll();
+  const actionCommand = commands.find(cmd => cmd.name === "_execute_action");
+  const shortcutText = actionCommand && actionCommand.shortcut ? actionCommand.shortcut : "Not set";
+
+  // Add a separator and the shortcut info
+  chrome.contextMenus.create({
+    id: "separator",
+    type: "separator",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "shortcut-info",
+    title: `Shortcut: ${shortcutText}`,
+    enabled: false,
+    contexts: ["action"]
+  });
 }
 
 /**
@@ -188,6 +208,20 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 
   if (urlsToOpen.length === 0) return;
+
+  // Copy opened URLs to clipboard
+  const urlsToCopy = urlsToOpen.join("\n");
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (text) => {
+        navigator.clipboard.writeText(text).catch(err => console.error("Clipboard copy failed:", err));
+      },
+      args: [urlsToCopy]
+    });
+  } catch (err) {
+    console.error("Scripting injection failed:", err);
+  }
 
   // Open tabs sequentially to the right of the active tab.
   // Each subsequent tab gets index + 1 so they appear in order.

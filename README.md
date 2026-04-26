@@ -4,7 +4,7 @@ A lightweight Chromium browser extension that instantly opens Civitai model page
 
 ## What It Does
 
-When browsing a model page on **civitai.com** or **civitai.red**, click the extension icon (or press `Alt+C`) to instantly open that model on:
+When browsing a model page on **civitai.com** or **civitai.red**, click the extension icon (or press `Alt+L`) to instantly open that model on:
 
 - [Civarchive.com](https://civarchive.com)
 - [Civitaiarchive.com](https://civitaiarchive.com)
@@ -14,7 +14,7 @@ The extension extracts the model ID from the current URL and constructs clean ar
 
 ## Features
 
-- **One-Click Access** — Click the icon or press `Alt+C` to open archive tabs.
+- **One-Click Access** — Click the icon or press `Alt+L` to open archive tabs.
 - **Smart Icon State** — Icon activates only on valid model pages; grayed out everywhere else.
 - **Context Menu Toggles** — Right-click the icon to enable/disable individual archive destinations.
 - **Options Page** — Full settings page synced with context menu preferences.
@@ -31,7 +31,7 @@ The extension extracts the model ID from the current URL and constructs clean ar
 
 ## Keyboard Shortcut
 
-The default shortcut is **Alt+C**. To customize:
+The default shortcut is **Alt+L**. To customize:
 1. Go to `chrome://extensions/shortcuts`.
 2. Find **CivitaiBridge** → "Open model on archive sites".
 3. Set your preferred key combination.
