@@ -68,23 +68,29 @@ chrome.runtime.onInstalled.addListener(async () => {
  *
  * Called once during onInstalled. Rules persist across service worker restarts.
  */
-async function registerDeclarativeContentRules() {
-  // Clear any stale rules before adding fresh ones
-  await chrome.declarativeContent.onPageChanged.removeRules(undefined);
+function registerDeclarativeContentRules() {
+  return new Promise((resolve) => {
+    // Clear any stale rules before adding fresh ones.
+    // Note: removeRules does not return a Promise in MV3, so we must use the callback.
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
+      const conditions = SOURCE_HOSTS.map(
+        (host) =>
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { hostEquals: host, pathPrefix: "/models/" },
+          })
+      );
 
-  const conditions = SOURCE_HOSTS.map(
-    (host) =>
-      new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: { hostEquals: host, pathPrefix: "/models/" },
-      })
-  );
-
-  await chrome.declarativeContent.onPageChanged.addRules([
-    {
-      conditions,
-      actions: [new chrome.declarativeContent.ShowAction()],
-    },
-  ]);
+      chrome.declarativeContent.onPageChanged.addRules(
+        [
+          {
+            conditions,
+            actions: [new chrome.declarativeContent.ShowAction()],
+          },
+        ],
+        () => resolve()
+      );
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -98,37 +104,39 @@ async function registerDeclarativeContentRules() {
  *
  * @param {Object} prefs - Current preference values keyed by destination key.
  */
-async function createContextMenus(prefs) {
-  // Remove existing items first (idempotent re-creation)
-  await chrome.contextMenus.removeAll();
+function createContextMenus(prefs) {
+  return new Promise((resolve) => {
+    // Remove existing items first (idempotent re-creation)
+    chrome.contextMenus.removeAll(async () => {
+      for (const dest of DESTINATIONS) {
+        chrome.contextMenus.create({
+          id: dest.key,
+          title: dest.label,
+          type: "checkbox",
+          checked: !!prefs[dest.key],
+          contexts: ["action"],
+        });
+      }
 
-  for (const dest of DESTINATIONS) {
-    chrome.contextMenus.create({
-      id: dest.key,
-      title: dest.label,
-      type: "checkbox",
-      checked: !!prefs[dest.key],
-      contexts: ["action"],
+      // Retrieve the current shortcut for the action
+      const commands = await chrome.commands.getAll();
+      const actionCommand = commands.find(cmd => cmd.name === "_execute_action");
+      const shortcutText = actionCommand && actionCommand.shortcut ? actionCommand.shortcut : "Not set";
+
+      // Add a separator and the shortcut info
+      chrome.contextMenus.create({
+        id: "separator",
+        type: "separator",
+        contexts: ["action"]
+      });
+
+      chrome.contextMenus.create({
+        id: "shortcut-info",
+        title: `Shortcut: ${shortcutText}`,
+        enabled: false,
+        contexts: ["action"]
+      }, () => resolve());
     });
-  }
-
-  // Retrieve the current shortcut for the action
-  const commands = await chrome.commands.getAll();
-  const actionCommand = commands.find(cmd => cmd.name === "_execute_action");
-  const shortcutText = actionCommand && actionCommand.shortcut ? actionCommand.shortcut : "Not set";
-
-  // Add a separator and the shortcut info
-  chrome.contextMenus.create({
-    id: "separator",
-    type: "separator",
-    contexts: ["action"]
-  });
-
-  chrome.contextMenus.create({
-    id: "shortcut-info",
-    title: `Shortcut: ${shortcutText}`,
-    enabled: false,
-    contexts: ["action"]
   });
 }
 
