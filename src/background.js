@@ -209,15 +209,15 @@ chrome.action.onClicked.addListener(async (tab) => {
 
   if (urlsToOpen.length === 0) return;
 
-  // Copy opened URLs to clipboard
-  const urlsToCopy = urlsToOpen.join("\n");
+  // Copy ONLY the first opened URL to the clipboard
+  const urlToCopy = urlsToOpen[0];
   try {
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: (text) => {
         navigator.clipboard.writeText(text).catch(err => console.error("Clipboard copy failed:", err));
       },
-      args: [urlsToCopy]
+      args: [urlToCopy]
     });
   } catch (err) {
     console.error("Scripting injection failed:", err);
