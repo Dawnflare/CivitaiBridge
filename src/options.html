@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CivitaiBridge Settings</title>
+  <style>
+    /* ---------------------------------------------------------------
+       CivitaiBridge Options Page — Inline Styles
+       Minimal, branded settings page matching Chrome's extension UI.
+    --------------------------------------------------------------- */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      color: #1a1a2e;
+      background: #f8f9fc;
+      padding: 24px 28px;
+      min-width: 320px;
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .option-group {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    /* Custom checkbox styling */
+    .option-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #c4c9d4;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .option-item input[type="checkbox"]:checked {
+      background: #4338CA;
+      border-color: #4338CA;
+    }
+
+    .option-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 6px;
+      height: 10px;
+      border: solid #ffffff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .option-item input[type="checkbox"]:focus-visible {
+      outline: 2px solid #818cf8;
+      outline-offset: 2px;
+    }
+
+    .option-item label {
+      font-size: 14px;
+      color: #374151;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .option-item label .domain {
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    /* Status indicator */
+    .status {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .status.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>CivitaiBridge</h1>
+  <p class="subtitle">Choose which archive sites to open when you activate the extension.</p>
+
+  <div class="option-group">
+    <div class="option-item">
+      <input type="checkbox" id="civarchive" />
+      <label for="civarchive">Open in <span class="domain">Civarchive.com</span></label>
+    </div>
+    <div class="option-item">
+      <input type="checkbox" id="civitaiarchive" />
+      <label for="civitaiarchive">Open in <span class="domain">Civitaiarchive.com</span></label>
+    </div>
+    <div class="option-item">
+      <input type="checkbox" id="civitaired" />
+      <label for="civitaired">Open in <span class="domain">Civitai.red</span></label>
+    </div>
+  </div>
+
+  <p class="status" id="status">Settings saved ✓</p>
+
+  <script src="options.js"></script>
+</body>
+</html>
