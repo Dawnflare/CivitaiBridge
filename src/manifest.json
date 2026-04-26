@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "CivitaiBridge",
+  "version": "1.0.0",
+  "description": "Instantly open Civitai model pages on archive sites (Civarchive, Civitaiarchive, Civitai.red).",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "contextMenus",
+    "declarativeContent"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "CivitaiBridge",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_state": "disabled"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+C"
+      },
+      "description": "Open model on archive sites"
+    }
+  }
+}
